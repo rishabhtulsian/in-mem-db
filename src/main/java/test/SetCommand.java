@@ -18,16 +18,5 @@ class SetCommand implements ICommand {
     @Override
     public void execute() {
         oldValue = db.set(args[1], args[2]);
-        db.addCommand(this);
     }
-
-    @Override
-    public void undo() {
-        if (oldValue == null) {
-            db.delete(args[1]);
-        } else {
-            db.set(args[1], oldValue);
-        }
-    }
-
 }

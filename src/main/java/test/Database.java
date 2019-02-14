@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 class Database {
 
     private Map<String, String> db;
     private Map<String, Integer> valueCount;
-    private List<List<ICommand>> transactions;
+    private List<Map<String, String>> transactions;
 
     public Database() {
         db = new HashMap<>();
@@ -20,6 +21,13 @@ class Database {
     public String set(String key, String value) {
         String oldValue = db.get(key);
         db.put(key, value);
+
+        if (transactions.size() > 0) {
+            Map<String, String> tdb = transactions.get(transactions.size() - 1);
+            if (!tdb.containsKey(key)) {
+                tdb.put(key, oldValue);
+            }
+        }
 
         if (oldValue == value) {
             return oldValue;
@@ -53,6 +61,13 @@ class Database {
     public String delete(String key) {
         String value = db.remove(key);
 
+        if (transactions.size() > 0) {
+            Map<String, String> tdb = transactions.get(transactions.size() - 1);
+            if (!tdb.containsKey(key)) {
+                tdb.put(key, value);
+            }
+        }
+
         if (value == null) {
             return null;
         }
@@ -73,7 +88,7 @@ class Database {
     }
 
     public void begin() {
-        transactions.add(new ArrayList<>());
+        transactions.add(new HashMap<>());
     }
 
     public void commit() {
@@ -82,16 +97,14 @@ class Database {
 
     public void rollback() {
         if (transactions.size() > 0) {
-            List<ICommand> commands = transactions.get(transactions.size() - 1);
-            for (int index = commands.size() - 1; index >= 0; index--) {
-                commands.get(index).undo();
+            Map<String, String> tdb = transactions.get(transactions.size() - 1);
+            for (Entry<String, String> entry : tdb.entrySet()) {
+                if (entry.getValue() == null) {
+                    this.delete(entry.getKey());
+                } else {
+                    this.set(entry.getKey(), entry.getValue());
+                }
             }
-        }
-    }
-
-    public void addCommand(ICommand command) {
-        if (transactions.size() > 0) {
-            transactions.get(transactions.size() - 1).add(command);
         }
     }
 }

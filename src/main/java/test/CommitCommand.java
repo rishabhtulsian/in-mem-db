@@ -16,9 +16,4 @@ class CommitCommand implements ICommand {
     public void execute() {
         db.commit();
     }
-
-    @Override
-    public void undo() {
-    }
-
 }

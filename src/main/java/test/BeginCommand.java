@@ -16,9 +16,4 @@ class BeginCommand implements ICommand {
     public void execute() {
         db.begin();
     }
-
-    @Override
-    public void undo() {
-    }
-
 }

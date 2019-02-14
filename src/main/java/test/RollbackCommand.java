@@ -16,8 +16,4 @@ class RollbackCommand implements ICommand {
     public void execute() {
         db.rollback();
     }
-
-    @Override
-    public void undo() {
-    }
 }

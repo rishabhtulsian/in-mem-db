@@ -28,11 +28,6 @@ class CommandFactory {
             public void execute() {
 
             }
-
-            @Override
-            public void undo() {
-
-            }
         };
     }
     public ICommand getCommand(String[] tokens) throws ApplicationEndedException {

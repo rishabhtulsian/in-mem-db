@@ -18,9 +18,4 @@ class GetCommand implements ICommand {
     public void execute() {
         System.out.println(db.get(args[1]));
     }
-
-    @Override
-    public void undo() {
-    }
-
 }

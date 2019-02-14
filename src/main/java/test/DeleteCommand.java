@@ -3,7 +3,6 @@ package test;
 class DeleteCommand implements ICommand {
     private String[] args;
     private Database db;
-    private String value;
 
     public DeleteCommand(String[] args, Database db) {
         this.args = args;
@@ -17,15 +16,6 @@ class DeleteCommand implements ICommand {
 
     @Override
     public void execute() {
-        value = db.delete(args[1]);
-        db.addCommand(this);
+        db.delete(args[1]);
     }
-
-    @Override
-    public void undo() {
-        if (value != null) {
-            db.set(args[1], value);
-        }
-    }
-
 }

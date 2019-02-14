@@ -18,9 +18,4 @@ class CountCommand implements ICommand {
     public void execute() {
         System.out.println(db.count(args[1]));
     }
-
-    @Override
-    public void undo() {
-    }
-
 }
